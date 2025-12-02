@@ -7,14 +7,14 @@ from django.contrib.auth.models import (
     BaseUserManager,
     PermissionsMixin,
 )
-# AbstractBaseUser provides the core implementation of a user model without any fields.
-# permissionsMixin adds the fields and methods necessary to support Django's permission framework.
-# PermissionsMixin includes fields like is_superuser and methods for checking permissions.
+# AbstractBaseUser provides the core implementation of a user model
+# without any fields.
+# PermissionsMixin adds the fields and methods necessary to support
+# Django's permission framework, including is_superuser field.
+
 
 class UserManager(BaseUserManager):
-    """
-    Custom user manager to handle user creation with email as the unique identifier.
-    """
+    """Manager for users."""
     def create_user(self, email, password=None, **extra_fields):
         """Create and save a regular User with the given email and password."""
         if not email:
@@ -52,6 +52,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-# This tells Django: "Use email to log in, NOT username!"
+    # This tells Django: "Use email to log in, NOT username!"
+
     def __str__(self):
         return self.email
