@@ -48,3 +48,14 @@ class ModelTests(TestCase):
             # Assert that the saved email matches the--
             # --> expected normalized version
             self.assertEqual(user.email, expected)
+
+    def test_new_user_without_email_raises_error(self):
+        """Test that creating a user without an email raises a ValueError"""
+        # assertRaises is a context manager that checks if an exception
+        # is raised inside the 'with' block
+        with self.assertRaises(ValueError):
+            # Try to create a user with empty string '' as email
+            # This should trigger the ValueError from our create_user():
+            # "if not email: raise ValueError('The Email field must be set')"
+            # If ValueError is NOT raised, the test FAILS
+            get_user_model().objects.create_user('', 'test123')
