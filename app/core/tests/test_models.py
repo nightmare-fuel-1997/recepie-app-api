@@ -59,3 +59,29 @@ class ModelTests(TestCase):
             # "if not email: raise ValueError('The Email field must be set')"
             # If ValueError is NOT raised, the test FAILS
             get_user_model().objects.create_user('', 'test123')
+
+    def test_create_superuser(self):
+        """Test creating a superuser"""
+        # Setup: define test credentials
+        email = "superuser@example.com"
+        password = "superpass123"
+
+        # Action: create a superuser using our custom manager's method
+        # This calls UserManager.create_superuser() which:
+        # 1. Sets is_staff=True and is_superuser=True
+        # 2. Calls create_user() to hash password and save
+        user = get_user_model().objects.create_superuser(
+            email=email,
+            password=password
+        )
+
+        # Assert: verify the user was created correctly
+        # Check email was saved properly
+        self.assertEqual(user.email, email)
+        # Check password was hashed and can be verified
+        self.assertTrue(user.check_password(password))
+        # Check superuser flag is True (from PermissionsMixin)
+        # This grants all permissions without explicitly assigning them
+        self.assertTrue(user.is_superuser)
+        # Check staff flag is True (can access Django admin site)
+        self.assertTrue(user.is_staff)
